@@ -45,7 +45,7 @@
 
 <script>
   export default {
-    name: "login",
+    name: "Login",
     data () {
       return {
         loginName: '',
@@ -253,7 +253,7 @@
     width: 100%;
     height: 30px;
     background-color: rgb(247, 247, 247);
-    border-width: initial;
+    /*border-width: initial;*/
     border-style: none;
     border-color: initial;
     border-image: initial;
@@ -286,7 +286,7 @@
      color: rgb(255, 255, 255);
      cursor: pointer;
      padding: 0px;
-     border-width: initial;
+     /*border-width: initial;*/
      border-style: none;
      border-color: initial;
      border-image: initial;

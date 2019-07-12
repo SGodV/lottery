@@ -4,14 +4,20 @@
       <div class="page-container">
         <div class="top-nav" data-spm="topnav">
           <div class="top-nav-wrapper">
-            <a class="active" aria-current="page" href="/">
+            <router-link class="active" @click.native="navShow1" :to="'/'">
               <div class="logo"></div>
-            </a>
-            <div class="links">
-              <a class="active" href="">摇号活动</a>
-              <a href="">摇号历史</a>
-              <a href="">摇中历史</a>
-              <a href="">会员中心</a>
+            </router-link>
+            <div class="links" v-if="isAdmin">
+              <router-link :class="{active:isShow===1}" @click.native="navShow1" :to="'/AdminHome'">摇号活动</router-link>
+              <router-link :class="{active:isShow===2}" @click.native="navShow2" :to="'/CreateLottery/ShowDefine'">创建摇号</router-link>
+              <router-link :class="{active:isShow===3}" @click.native="navShow3" :to="{name: 'Home'}">摇号界面</router-link>
+              <router-link :class="{active:isShow===4}" @click.native="navShow4" :to="'/'">摇号结果</router-link>
+            </div>
+            <div class="links" v-else>
+              <router-link :class="{active:isShow===1}" @click.native="navShow1" :to="'/'">摇号活动</router-link>
+              <router-link :class="{active:isShow===2}" @click.native="navShow2" :to="{name: 'Home'}">摇号历史</router-link>
+              <router-link :class="{active:isShow===3}" @click.native="navShow3" :to="{name: 'Home'}">摇中历史</router-link>
+              <router-link :class="{active:isShow===4}" @click.native="navShow4" :to="{name: 'Home'}">会员中心</router-link>
             </div>
             <div class="user">
               <div class="login-text" v-if="isLogin">
@@ -34,7 +40,7 @@
 
 <script>
   // import Vue from 'vue'
-  import login from './components/login'
+  import login from './components/Login'
   // let loginAppend=Vue.extend(login);//将导入组件转为类
   // let tt = new loginAppend();//实例化组件类,挂载到 #test
   // tt.$mount("#login");
@@ -49,7 +55,9 @@
     data () {
       return {
         loginIf: false,
-        isLogin: false
+        isLogin: false,
+        isAdmin: false,
+        isShow: 1
       }
     },
     methods: {
@@ -62,12 +70,37 @@
       receiveLogin: function (mes) {
         this.isLogin = mes;
         // console.log(this.GLOBAL.userInfo);
+        if (this.GLOBAL.userInfo.userPower === 'A') {
+          console.log('Admin Login');
+          this.isAdmin = true;
+          this.$router.push({path: '/AdminHome'})
+        }
       },
       clickExit: function () {
         this.isLogin = false;
+        this.isAdmin = false;
         this.GLOBAL.userInfo = [];
-      }
-    }
+      },
+      navShow1: function () {
+        this.isShow = 1;
+        // console.log('click1:'+this.isShow);
+      },
+      navShow2: function () {
+        this.isShow = 2;
+        // console.log('click2:'+this.isShow);
+      },
+      navShow3: function () {
+        this.isShow = 3;
+        // console.log('click3'+this.isShow);
+      },
+      navShow4: function () {
+        this.isShow = 4;
+        // console.log('click4:'+this.isShow);
+      },
+    },
+    updated: function () {
+      // console.log('更新');
+    },
   }
 
 </script>

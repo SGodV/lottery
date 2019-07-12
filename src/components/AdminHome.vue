@@ -1,31 +1,22 @@
 <template>
-    <div class="home_view" >
-      <div class="home_item" v-for="lottery in lotteryList">
-        <label>{{lottery.title}}</label>
-        <button class="apply_button">申请</button>
-      </div>
+  <div class="home_view" >
+    <div class="home_item" v-for="lottery in lotteryList">
+      <label>{{lottery.title}}</label>
+      <button class="apply_button">删除</button>
     </div>
+  </div>
 </template>
 
 <script>
     export default {
-        name: "Home",
+        name: "AdminHome",
       data () {
-          return {
-            lotteryList: [
-              {title: '北京市购房摇号'},
-              {title: '杭州市购车摇号'}
-            ]
-          }
-      },
-      methods: {
-
-      },
-      mounted: function() {
-        // console.log('挂载');
-      },
-      updated: function () {
-        // console.log('更新');
+        return {
+          lotteryList: [
+            {title: '北京市购房摇号'},
+            {title: '杭州市购车摇号'}
+          ]
+        }
       }
     }
 </script>
