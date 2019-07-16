@@ -67,13 +67,28 @@
             }
           }).then(function (res) {
           console.log(res);
+          console.log(res.data);
           console.log(res.data.data);
           // console.log(that.GLOBAL);
           // console.log(that.GLOBAL.userInfo);
           // console.log(2+that.GLOBAL.host);
-          that.GLOBAL.userInfo = res.data.data;
-          that.$emit("successLogin", true);
-          that.closeLogin();
+
+          if (res.data.msg === 'success') {
+            that.GLOBAL.userInfo = res.data.data;
+            that.$emit("successLogin", true);
+            that.closeLogin();
+            that.$notify({
+              title: '登陆成功',
+              message: res.data.msg,
+              type: 'success'
+            });
+          } else {
+            that.$notify.error({
+              title: '错误',
+              message: res.data.msg
+            });
+          }
+
         }).catch(function (err) {
           console.log(err);
         });

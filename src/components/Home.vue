@@ -1,33 +1,77 @@
 <template>
-    <div class="home_view" >
-      <div class="home_item" v-for="lottery in lotteryList">
-        <label>{{lottery.title}}</label>
-        <button class="apply_button">申请</button>
-      </div>
+  <div class="home_view" >
+    <div class="home_item" v-for="lottery in lotteryList" :key="lottery.id">
+      <label>{{lottery.title}}</label>
+      <button class="apply_button" @click="apply(lottery.id)">申请</button>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "Home",
-      data () {
-          return {
-            lotteryList: [
-              {title: '北京市购房摇号'},
-              {title: '杭州市购车摇号'}
-            ]
-          }
-      },
-      methods: {
-
-      },
-      mounted: function() {
-        // console.log('挂载');
-      },
-      updated: function () {
-        // console.log('更新');
+  export default {
+    name: "Home",
+    data () {
+      return {
+        lotteryList: [],
+        isLogin: this.$route.params.isLogin
       }
+    },
+    methods: {
+      apply: function (id) {
+        this.$ajax.get(this.GLOBAL.host+'/record/apply',{
+          params: {
+            userId: this.GLOBAL.userInfo.id,
+            periodId:id
+          }
+        })
+          .then(function (res) {
+            console.log(res);
+            console.log(res.data.data);
+            if (res.data.msg === 'success') {
+              that.$notify({
+                title: '申请成功',
+                message: res.data.msg,
+                type: 'success'
+              });
+            } else {
+              that.$notify.error({
+                title: '错误',
+                message: res.data.msg
+              });
+            }
+          }).catch(function (err) {
+          console.log(err);
+        });
+      }
+    },
+    mounted: function () {
+           // console.log("挂载了："+this.$route.params.isLogin);
+      var that = this;
+      this.$ajax.get(this.GLOBAL.host+'/period/loadall')
+        .then(function (res) {
+        console.log(res);
+        console.log(res.data.data);
+          if (res.data.msg === 'success') {
+            that.lotteryList = res.data.data;
+            that.$notify({
+              title: '获取成功',
+              message: res.data.msg,
+              type: 'success'
+            });
+          } else {
+            that.$notify.error({
+              title: '错误',
+              message: res.data.msg
+            });
+          }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    updated: function () {
+      // console.log("更新了："+this.$route.params.isLogin);
     }
+  }
 </script>
 
 <style scoped>

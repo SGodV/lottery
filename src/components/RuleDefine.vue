@@ -9,13 +9,13 @@
       <input id="is_letter" type="checkbox" @change="getIL" placeholder="请输入字母位数" v-model="isLetter" class="">
       <label for="is_letter">（英文字母会加在数字前面）</label>
     </div>
-    <div class="form-block">
+    <div class="form-block" v-if="isNum">
       <label for="num">数字长度</label>
       <input id="num" type="number" @change="getNL" placeholder="请输入数字长度" v-model="numLength" class="">
     </div>
-    <div class="form-block">
+    <div class="form-block" v-if="isLetter">
       <label for="letter">字母长度</label>
-      <input id="letter" type="number" @change="getLL" placeholder="请输入活动标题" v-model="numLength" class="">
+      <input id="letter" type="number" @change="getLL" placeholder="请输入活动标题" v-model="letterLength" class="">
     </div>
   </div>
 </template>

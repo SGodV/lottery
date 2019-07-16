@@ -14,6 +14,7 @@
             <router-view/>
           </keep-alive>
         </div>
+        <button class="create_lottery" v-on:click="createLottery">新增摇号活动</button>
       </div>
     </div>
 </template>
@@ -23,7 +24,8 @@
         name: "CreateLottery",
       data () {
           return {
-            isShow: 1
+            isShow: 1,
+            pic: []
           }
       },
       methods: {
@@ -36,7 +38,60 @@
         },
         tabShow3: function () {
           this.isShow = 3;
-        }
+        },
+        createLottery: function () {
+
+         let file = this.GLOBAL.lotteryInfo.pic;
+          // console.log(file);
+          if(file) {
+            let reader = new FileReader();
+            var that = this;
+            reader.readAsDataURL(file);
+            reader.onload= function(e){
+              // 这里的this 指向reader
+              that.pic = this.result;
+              let postData = that.$qs.stringify({
+                title: that.GLOBAL.lotteryInfo.lotteryTitle,
+                numIf: that.GLOBAL.lotteryInfo.isNum,
+                numLength: that.GLOBAL.lotteryInfo.numLength,
+                letterIf: that.GLOBAL.lotteryInfo.isLetter,
+                letterLength: that.GLOBAL.lotteryInfo.letterLength,
+                joinNum: that.GLOBAL.lotteryInfo.peopleNum,
+                winNum: that.GLOBAL.lotteryInfo.lotteryNum,
+                pic: this.result
+              });
+              console.log(postData);
+              that.$ajax({
+                method: 'post',
+                url: that.GLOBAL.host+'/period/createlottery',
+                data: postData
+              }).then(function (res) {
+                console.log(res);
+                console.log(res.data.data);
+                if (res.data.msg === 'success') {
+                  that.GLOBAL.lotteryInfo = [];
+                  that.$parent.navShow1();
+                  that.$notify({
+                    title: '填充成功',
+                    message: res.data.msg,
+                    type: 'success'
+                  });
+                  that.$router.push({path: '/AdminHome'});
+                } else {
+                  that.GLOBAL.lotteryInfo = [];
+                  that.$parent.navShow1();
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.data.msg
+                  });
+                  that.$router.push({path: '/AdminHome'});
+                }
+              }).catch(function (err) {
+                console.log(err);
+              });
+            }
+            }
+          }
       }
     }
 </script>
@@ -71,5 +126,28 @@
   .right_view {
     float: right;
     width: 1000px;
+  }
+  .create_lottery {
+    margin: 100px 0;
+    width: 50%;
+    height: 48px;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 24px;
+    background-color: rgb(255, 65, 15);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    padding: 0px;
+    /* border-width: initial; */
+    border-style: none;
+    border-color: initial;
+    -o-border-image: initial;
+    border-image: initial;
+  }
+  .form-action button[data-v-ef68022e] {
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+    border-radius: 24px;
   }
 </style>
